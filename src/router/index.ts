@@ -1,27 +1,29 @@
+import AuthView from '@/views/AuthView.vue';
 import { createRouter, createWebHistory } from 'vue-router';
-import AuthView from '../views/AuthView.vue';
 
-const LS_VALUE = 'sepaph-puzzle';
+const LS_VALUE = 'seraph-puzzle';
 
-function isAuth() {
-  return Boolean(localStorage.getItem(LS_VALUE) || false);
+function isAuth(): boolean {
+  return Boolean(localStorage.getItem(LS_VALUE));
 }
 
 const router = createRouter({
+  // todo: add main layout to have same styles in every page
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'home',
+      path: '/auth',
+      name: 'auth',
       component: AuthView,
     },
     {
-      path: '/main',
+      path: '/',
       name: 'main',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/MainView.vue'),
+      component: () => import('@/views/MainView.vue'),
+      meta: { requiresAuth: true },
     },
     {
       path: '/about',
@@ -29,24 +31,19 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
+      component: () => import('@/views/AboutView.vue'),
     },
   ],
 });
 
-router.beforeEach((to, from) => {
-  console.log(to, from);
-
-
-/*
-  make MainView - private,
-   if isAuth === false, re-direct to '/'
-   if isAuth === true, re-direct to MainView from '/'
-*/
-
-
-
-    /* false - restrict route */
+router.beforeEach((to, _, next) => {
+  if (to.meta.requiresAuth && !isAuth()) {
+    next({ path: '/auth', query: { redirect: to.fullPath } });
+  } else if (to.name === 'auth' && isAuth()) {
+    next({ name: 'main' });
+  } else {
+    next();
+  }
 });
 
 export default router;
