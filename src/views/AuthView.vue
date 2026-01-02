@@ -1,23 +1,63 @@
 <script setup lang="ts">
-import Button from '@/components/Button.vue';
-import router from '@/router';
+import Button from '@/components/ButtonDefault.vue';
+import InputDefault from '@/components/InputDefault.vue';
+import router, { ROUTES } from '@/router';
+import { LS_TOKEN } from '@/router/middleware';
+import { validateName, validateSurname, type ValidationError } from '@/utils/validation';
+import { computed, ref, watch } from 'vue';
 
-function auth() {
-  /*  some logic of authorization */
+const form = ref<{ name?: string, surname?: string }>({})
+const nameErrors = ref<ValidationError>([]);
+const surnameErrors = ref<ValidationError>([]);
 
-  router.push('/main');
+const formErrors = computed(() => {
+  return [...nameErrors.value, ...surnameErrors.value];
+});
+
+
+watch(() => form.value.name, (newName) => {
+  nameErrors.value = validateName(newName);
+});
+
+watch(() => form.value.surname, (newSurname) => {
+  surnameErrors.value = validateSurname(newSurname);
+});
+
+async function onSubmit() {
+  nameErrors.value = validateName(form.value.name);
+  surnameErrors.value = validateSurname(form.value.surname);
+
+  if (formErrors.value.length === 0) {
+    localStorage.setItem(LS_TOKEN, form.value.name as string)
+    router.push(ROUTES.START)
+  }
 }
 </script>
 
 <template>
   <div class="greetings">
     <h1>auth window</h1>
-    <form>
-      <label>login:</label>
-      <input />
-      <label>password:</label>
-      <input />
-      <Button @click="auth">enter</Button>
+
+    <form @submit.prevent="onSubmit">
+      <div class="field">
+        <InputDefault v-model="form.name" placeholder="name" />
+        <div v-if="nameErrors.length" class="error-messages">
+          <span v-for="(error, index) in nameErrors" :key="`name-error-${index}`" class="error">
+            {{ error }}
+          </span>
+        </div>
+      </div>
+
+      <div class="field">
+        <InputDefault v-model="form.surname" placeholder="surname" />
+        <div v-if="surnameErrors.length" class="error-messages">
+          <span v-for="(error, index) in surnameErrors" :key="`surname-error-${index}`" class="error">
+            {{ error }}
+          </span>
+        </div>
+      </div>
+
+      <Button type="submit" :disabled="formErrors.length > 0">login</Button>
     </form>
   </div>
 </template>
@@ -37,30 +77,21 @@ form {
   margin: 2rem auto;
 }
 
-label {
-  font-weight: 500;
-  color: var(--color-heading);
-  /* from where those vars??? */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
-input {
-  padding: 0.5rem;
-  border: 1px solid var(--color-border);
-  border-radius: 4px;
+.error-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: beige;
 }
 
-input:focus {
-  outline: none;
-  border-color: var(--vt-c-green);
-}
-
-button {
-  padding: 0.5rem;
-  border: none;
-  transition: transform 0.5s;
-}
-
-button:hover {
-  transform: scaleX(0.95);
+.error {
+  color: beige;
 }
 </style>
