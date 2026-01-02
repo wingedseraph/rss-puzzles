@@ -2,10 +2,11 @@
 import Button from '@/components/ButtonDefault.vue';
 import InputDefault from '@/components/InputDefault.vue';
 import router, { ROUTES } from '@/router';
-import { LS_TOKEN } from '@/router/middleware';
+import { useAuthStore } from '@/stores/auth.store';
 import { validateName, validateSurname, type ValidationError } from '@/utils/validation';
 import { computed, ref, watch } from 'vue';
 
+const authStore = useAuthStore()
 const form = ref<{ name?: string, surname?: string }>({})
 const nameErrors = ref<ValidationError>([]);
 const surnameErrors = ref<ValidationError>([]);
@@ -28,7 +29,8 @@ async function onSubmit() {
   surnameErrors.value = validateSurname(form.value.surname);
 
   if (formErrors.value.length === 0) {
-    localStorage.setItem(LS_TOKEN, form.value.name as string)
+    authStore.setToken(form.value.name as string)
+
     router.push(ROUTES.START)
   }
 }
