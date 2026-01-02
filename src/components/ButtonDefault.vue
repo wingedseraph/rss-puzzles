@@ -52,11 +52,11 @@ const displayLabel = computed(() => {
 
 <style scoped>
 button {
+  min-width: 232px;
   padding: 0.5rem;
   border: 1px solid var(--color-border);
   border-radius: 4px;
-  background-color: hsla(160, 100%, 37%, 1);
-  color: white;
+  color: black;
   transition: transform 0.5s;
   display: flex;
   justify-content: center;
@@ -65,7 +65,7 @@ button {
 }
 
 button:hover:not(:disabled) {
-  transform: scaleX(0.95);
+  transform: scaleX(0.98);
 }
 
 .spinner {
