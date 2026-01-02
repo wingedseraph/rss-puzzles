@@ -1,49 +1,52 @@
 import AuthView from '@/views/AuthView.vue';
+import NotFoundView from '@/views/NotFoundView.vue';
 import { createRouter, createWebHistory } from 'vue-router';
+import { authMiddleware } from './middleware';
 
-const LS_VALUE = 'seraph-puzzle';
-
-function isAuth(): boolean {
-  return Boolean(localStorage.getItem(LS_VALUE));
-}
+export const ROUTES = {
+  INDEX: '/',
+  AUTH: '/auth',
+  START: '/start',
+  GAME: '/game/:level/:round',
+  STATISTICS: '/statistics',
+  NOTFOUND: '/:pathMatch(.*)*',
+} as const;
 
 const router = createRouter({
-  // todo: add main layout to have same styles in every page
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/auth',
-      name: 'auth',
-      component: AuthView,
+      path: ROUTES.INDEX,
+      redirect: ROUTES.AUTH,
     },
     {
-      path: '/',
-      name: 'main',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('@/views/MainView.vue'),
+      path: ROUTES.AUTH,
+      component: AuthView,
+      meta: { requiresGuest: true },
+    },
+    {
+      path: ROUTES.START,
+      component: () => import('@/views/StartView.vue'),
       meta: { requiresAuth: true },
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('@/views/AboutView.vue'),
+      path: ROUTES.GAME,
+      component: () => import('@/views/GameView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: ROUTES.STATISTICS,
+      component: () => import('@/views/StatisticsView.vue'),
+      meta: { requiresAuth: true },
+    },
+
+    {
+      path: ROUTES.NOTFOUND,
+      component: NotFoundView,
     },
   ],
 });
 
-router.beforeEach((to, _, next) => {
-  if (to.meta.requiresAuth && !isAuth()) {
-    next({ path: '/auth', query: { redirect: to.fullPath } });
-  } else if (to.name === 'auth' && isAuth()) {
-    next({ name: 'main' });
-  } else {
-    next();
-  }
-});
+router.beforeEach(authMiddleware);
 
 export default router;
