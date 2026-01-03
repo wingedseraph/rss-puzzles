@@ -43,20 +43,27 @@ async function onSubmit() {
     <form @submit.prevent="onSubmit">
       <div class="field">
         <InputDefault v-model="form.name" placeholder="name" />
-        <div v-if="nameErrors.length" class="error-messages">
-          <span v-for="(error, index) in nameErrors" :key="`name-error-${index}`" class="error">
-            {{ error }}
-          </span>
-        </div>
+
+        <Transition>
+          <div v-if="nameErrors.length" class="error-messages">
+            <span v-for="(error, index) in nameErrors" :key="`name-error-${index}`" class="error">
+              {{ error }}
+            </span>
+          </div>
+        </Transition>
       </div>
 
       <div class="field">
         <InputDefault v-model="form.surname" placeholder="surname" />
-        <div v-if="surnameErrors.length" class="error-messages">
-          <span v-for="(error, index) in surnameErrors" :key="`surname-error-${index}`" class="error">
-            {{ error }}
-          </span>
-        </div>
+
+        <Transition>
+          <div v-if="surnameErrors.length" class="error-messages">
+            <span v-for="(error, index) in surnameErrors" :key="`surname-error-${index}`" class="error">
+              {{ error }}
+            </span>
+          </div>
+        </Transition>
+
       </div>
 
       <Button type="submit" :disabled="formErrors.length > 0">login</Button>
@@ -90,10 +97,5 @@ form {
   flex-direction: column;
   gap: 0.25rem;
   font-size: 0.8rem;
-  color: beige;
-}
-
-.error {
-  color: beige;
 }
 </style>
