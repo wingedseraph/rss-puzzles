@@ -54,7 +54,7 @@ const displayLabel = computed(() => {
 button {
   min-width: 232px;
   padding: 0.5rem;
-  border: 1px solid var(--color-border);
+  border: 1px solid transparent;
   border-radius: 4px;
   color: black;
   transition: transform 0.5s;
@@ -66,6 +66,12 @@ button {
 
 button:hover:not(:disabled) {
   transform: scaleX(0.98);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .spinner {
