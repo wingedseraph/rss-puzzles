@@ -3,12 +3,12 @@ import ButtonDefault from '@/components/ButtonDefault.vue';
 import router, { VIEW_NAMES } from '@/router';
 import { useAuthStore } from '@/stores/auth.store';
 
-const authStore = useAuthStore()
+const authStore = useAuthStore();
 
 function logout() {
-  authStore.deleteToken()
+  authStore.deleteToken();
   // workaround for router.push('auth') doesn't change url
-  location.reload()
+  location.reload();
 }
 
 function routeToGame() {
