@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 
-export const TOKEN_STORE_KEY = 'seraph-puzzle' as const;
+const TOKEN_STORE_KEY = 'seraph-puzzle' as const;
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref<string>();
@@ -11,7 +11,8 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.setItem(TOKEN_STORE_KEY, newToken);
   };
 
-  const getToken = computed(() => token.value);
+  const getToken = () => localStorage.getItem(TOKEN_STORE_KEY);
+  const deleteToken = () => localStorage.removeItem(TOKEN_STORE_KEY);
 
-  return { setToken, getToken };
+  return { setToken, getToken, deleteToken };
 });

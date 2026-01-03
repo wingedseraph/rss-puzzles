@@ -12,6 +12,10 @@ export const ROUTES = {
   NOTFOUND: '/:pathMatch(.*)*',
 } as const;
 
+export const VIEW_NAMES = {
+  GAME: 'game',
+} as const;
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -31,6 +35,7 @@ const router = createRouter({
     },
     {
       path: ROUTES.GAME,
+      name: VIEW_NAMES.GAME,
       component: () => import('@/views/GameView.vue'),
       meta: { requiresAuth: true },
     },

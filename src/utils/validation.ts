@@ -1,4 +1,4 @@
-type User = { name?: string; surname?: string };
+type User = { name: string; surname: string };
 
 export type ValidationError = string[];
 

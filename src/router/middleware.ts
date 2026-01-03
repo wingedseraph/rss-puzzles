@@ -8,7 +8,7 @@ export function authMiddleware(
   next: NavigationGuardNext,
 ) {
   const authStore = useAuthStore();
-  const token = authStore.getToken;
+  const token = authStore.getToken();
   const isAuth = !!token;
 
   if (to.meta.requiresGuest && isAuth) {
