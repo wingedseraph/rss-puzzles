@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ButtonDefault from '@/components/ButtonDefault.vue';
 import { type Level, dataService } from '@/services';
 import { onMounted, ref } from 'vue';
 
@@ -8,7 +9,6 @@ const loading = ref(true);
 onMounted(async () => {
   try {
     levelData.value = await dataService.fetchLevelData(1);
-    console.log(levelData.value);
   } catch (error) {
     console.error('Error fetching level data:', error);
   } finally {
@@ -33,7 +33,7 @@ const playWordAudio = async (audioPath: string) => {
         <h2>Round {{ round.id }}</h2>
         <div v-for="word in round.words" :key="word.id">
           <p>{{ word }}</p>
-          <img :src="dataService.fetchImageUrlSync(word.image)" />
+          <img class="word-image" :src="dataService.fetchImageUrlSync(word.image)" />
           <div class="buttons">
             <ButtonDefault @click="playWordAudio(word.audio)">Play Audio</ButtonDefault>
             <ButtonDefault @click="dataService.stopAudio()">Stop Audio</ButtonDefault>
@@ -45,7 +45,7 @@ const playWordAudio = async (audioPath: string) => {
 </template>
 
 <style lang="css" scoped>
-img {
+.word-image {
   max-width: 400px;
   border-radius: 4px;
 }
