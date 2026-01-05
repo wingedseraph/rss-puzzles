@@ -9,44 +9,43 @@ type Props = {
   label?: string;
 };
 
-// todo: rewrite to destruct
-const props = withDefaults(defineProps<Props>(), {
-  variant: 'primary',
-  type: 'button',
-  disabled: false,
-  loading: false,
-  label: 'submit',
-});
+const {
+  variant = 'primary',
+  type = 'button',
+  disabled = false,
+  loading = false,
+  label = 'submit'
+} = defineProps<Props>();
 
 const emit = defineEmits<{
   (e: 'click', event: MouseEvent): void;
 }>();
 
 const handleClick = (event: MouseEvent) => {
-  if (!props.disabled && !props.loading) {
+  if (!disabled && !loading) {
     emit('click', event);
   }
 };
 
 const buttonState = computed(() => ({
-  variant: props.variant,
-  disabled: props.disabled,
-  loading: props.loading,
+  variant,
+  disabled,
+  loading,
 }));
 
 const displayLabel = computed(() => {
-  if (props.loading) {
-    return `${props.label} waiting`;
+  if (loading) {
+    return `${label} waiting`;
   }
-  return props.label;
+  return label;
 });
 </script>
 <template>
-  <button :type="props.type" :disabled="props.disabled || props.loading" @click="handleClick">
+  <button :type="type" :disabled="disabled || loading" @click="handleClick">
     <slot :buttonState="buttonState" :label="displayLabel">
       {{ displayLabel }}
     </slot>
-    <span v-if="props.loading" class="spinner"> ◡</span>
+    <span v-if="loading" class="spinner"> ◡</span>
   </button>
 </template>
 

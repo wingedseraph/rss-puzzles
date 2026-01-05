@@ -10,7 +10,7 @@ type Props = {
 
 const props = withDefaults(defineProps<Props>(), {
   isDraggable: true,
-  isCorrect: false,
+  isCorrect: undefined,
 });
 
 const emit = defineEmits<{
@@ -21,12 +21,21 @@ const emit = defineEmits<{
 
 const cardClasses = computed(() => ({
   'word-card': true,
-  'word-card--correct': props.isCorrect,
-  'word-card--draggable': props.isDraggable,
+  'word-card--correct': props.isCorrect === true,
+  'word-card--incorrect': props.isCorrect === false,
 }));
 
 const handleClick = () => {
   emit('click', props.word);
+};
+
+const handleDragStart = (e: DragEvent) => {
+  e.dataTransfer?.setDragImage(e.target as HTMLElement, 0, 0);
+  emit('dragStart', e);
+};
+
+const handleDragEnd = (e: DragEvent) => {
+  emit('dragEnd', e);
 };
 </script>
 
@@ -35,8 +44,8 @@ const handleClick = () => {
     :class="cardClasses"
     :draggable="isDraggable"
     @click="handleClick"
-    @dragstart="emit('dragStart', $event)"
-    @dragend="emit('dragEnd', $event)"
+    @dragstart="handleDragStart"
+    @dragend="handleDragEnd"
   >
     {{ word }}
   </div>
@@ -44,12 +53,23 @@ const handleClick = () => {
 
 <style lang="css" scoped>
 .word-card {
-  border: grey;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  background-color: rgb(239, 239, 239);
+  color: black;
 }
 .word-card--correct {
-  border: green;
+  background-color: darkolivegreen;
+  color: white;
 }
-.word-card--draggable {
-  border: orange;
+.word-card--incorrect {
+  background-color: darksalmon;
+  color: white;
+}
+
+.word-card--draggable:hover {
+  cursor: grabbing;
 }
 </style>
