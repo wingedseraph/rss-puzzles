@@ -55,6 +55,12 @@ export function transformLevelDataToRounds(data: unknown, level: number) {
       page: index,
       words,
       sentences,
+      artwork: {
+        imageSrc: apiRound.levelData.imageSrc || '',
+        title: apiRound.levelData.name || '',
+        artist: apiRound.levelData.author || '',
+        year: apiRound.levelData.year || '',
+      },
     });
   });
 

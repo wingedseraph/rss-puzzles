@@ -28,6 +28,12 @@ export type Round = {
   page: number;
   words: Word[];
   sentences: Sentence[];
+  artwork?: {
+    imageSrc: string;
+    title: string;
+    artist: string;
+    year: string;
+  };
 };
 
 export type Level = {
