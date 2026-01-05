@@ -1,15 +1,19 @@
+<script setup lang="ts">
+import LayoutDefault from '@/components/LayoutDefault.vue';
+
+</script>
+
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+  <LayoutDefault title="Statistics" :centered="true">
+    <div class="statistics">
+      <h1>Game Statistics</h1>
+      <p>Your game progress and achievements will be displayed here.</p>
+    </div>
+  </LayoutDefault>
 </template>
 
-<style>
-@media (min-width: 1024px) {
-  .about {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
+<style scoped>
+.statistics {
+  text-align: center;
 }
 </style>

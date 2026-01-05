@@ -14,11 +14,13 @@ function logout() {
 function routeToGame() {
   router.push({ name: VIEW_NAMES.GAME, params: { level: 1, round: 1 } });
 }
+
+const name = authStore.getToken();
 </script>
 
 <template>
   <div class="greetings">
-    <h1>start window</h1>
+    <h1>start window, {{ name }}</h1>
     <ButtonDefault @click="routeToGame">enter the game</ButtonDefault>
     <ButtonDefault @click="logout">logout</ButtonDefault>
   </div>
