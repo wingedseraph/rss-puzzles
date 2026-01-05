@@ -14,6 +14,9 @@ export const ROUTES = {
 
 export const VIEW_NAMES = {
   GAME: 'game',
+  START: 'start',
+  AUTH: 'auth',
+  STATISTICS: 'statistics',
 } as const;
 
 const router = createRouter({
@@ -25,11 +28,13 @@ const router = createRouter({
     },
     {
       path: ROUTES.AUTH,
+      name: VIEW_NAMES.AUTH,
       component: AuthView,
       meta: { requiresGuest: true },
     },
     {
       path: ROUTES.START,
+      name: VIEW_NAMES.START,
       component: () => import('@/views/StartView.vue'),
       meta: { requiresAuth: true },
     },
@@ -41,6 +46,7 @@ const router = createRouter({
     },
     {
       path: ROUTES.STATISTICS,
+      name: VIEW_NAMES.STATISTICS,
       component: () => import('@/views/StatisticsView.vue'),
       meta: { requiresAuth: true },
     },
