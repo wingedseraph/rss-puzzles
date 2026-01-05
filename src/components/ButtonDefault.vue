@@ -57,7 +57,7 @@ button {
   border: 1px solid transparent;
   border-radius: 4px;
   color: black;
-  transition: transform 0.5s;
+  transition: all 0.5s;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -65,7 +65,10 @@ button {
 }
 
 button:hover:not(:disabled) {
-  transform: scaleX(0.98);
+  background-color: white;
+  box-shadow:
+    rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset,
+    rgba(0, 0, 0, 0.9) 0px 0px 0px 1px;
 }
 
 button:disabled {
