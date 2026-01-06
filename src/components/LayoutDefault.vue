@@ -7,13 +7,13 @@ defineProps({
 
 <template>
   <div class="layout">
-    <header v-if="title" class="layout__header">
+    <header v-if="title" class="header">
       <h1>{{ title }}</h1>
     </header>
-    <main class="layout--main">
+    <main class="main">
       <slot />
     </main>
-    <footer class="layout--footer">
+    <footer class="footer">
       <slot name="footer" />
     </footer>
   </div>
@@ -25,18 +25,18 @@ defineProps({
   flex-direction: column;
 }
 
-.layout__header {
+.header {
   padding: 1rem;
   text-align: center;
 }
 
-.layout--main {
+.main {
   width: 100%;
   max-width: 1200px;
   padding: 0 1rem;
 }
 
-.layout--footer {
+.footer {
   padding: 1rem;
   text-align: center;
 }

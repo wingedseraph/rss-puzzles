@@ -3,9 +3,11 @@ import ArtworkReveal from '@/components/game/ArtworkReveal.vue';
 import GameActions from '@/components/game/GameActions.vue';
 import SentenceRow from '@/components/game/SentenceRow.vue';
 import WordCardsArea from '@/components/game/WordCardsArea.vue';
+import LayoutDefault from '@/components/LayoutDefault.vue';
 import { useDragAndDrop } from '@/composables/useDragAndDrop';
 import router, { VIEW_NAMES } from '@/router';
 import { dataService } from '@/services';
+import { useAuthStore } from '@/stores/auth.store';
 import { useGameStore } from '@/stores/game.store';
 import { onMounted, toRef, watch } from 'vue';
 import { useRoute } from 'vue-router';
@@ -46,10 +48,18 @@ const navigateToNextPageHandler = () => {
 const navigateToStatistics = () => {
   router.push({ name: VIEW_NAMES.STATISTICS });
 };
+
+const authStore = useAuthStore();
+
+function logout() {
+  authStore.deleteToken();
+  // workaround for router.push('auth') doesn't change url
+  location.reload();
+}
 </script>
 
 <template>
-  <div class="container">
+  <LayoutDefault class="container">
     <div v-if="gameStore.showArtwork && gameStore.currentArtwork">
       <ArtworkReveal
         :artwork="gameStore.currentArtwork"
@@ -110,6 +120,7 @@ const navigateToStatistics = () => {
           />
         </div>
       </div>
+      <button class="button-logout" @click="logout">logout</button>
     </div>
 
     <div v-else-if="gameStore.loading">
@@ -118,7 +129,7 @@ const navigateToStatistics = () => {
     <div v-else>
       <p>Error loading level data</p>
     </div>
-  </div>
+  </LayoutDefault>
 </template>
 
 <style scoped>
@@ -152,5 +163,16 @@ const navigateToStatistics = () => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.button-logout {
+  border: none;
+  outline: none;
+  background-color: transparent;
+
+  font-size: 1.5rem;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 </style>
